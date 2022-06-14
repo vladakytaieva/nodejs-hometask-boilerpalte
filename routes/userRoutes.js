@@ -55,12 +55,13 @@ router.put('/:id', updateUserValid, (req, res, next) => {
     }
     try {
         const {firstName, lastName, email, phoneNumber, password} = req.body;
+        const userData = UserService.search({id: req.params.id});
         const user = UserService.update({id: req.params.id}, {
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            password
+            firstName: firstName ? firstName : userData.firstName,
+            lastName: lastName ? lastName : userData.lastName,
+            email: email ? email : userData.email,
+            phoneNumber: phoneNumber ? phoneNumber : userData.phoneNumber,
+            password: password ? password : userData.password
         });
         res.data = user;
     } catch (err) {
@@ -73,7 +74,7 @@ router.put('/:id', updateUserValid, (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     try {
         const user = UserService.delete({id: req.params.id});
-        res.data = user;
+        res.status(404).json('User was deleted successfully');
     } catch (err) {
         res.err = err;
     } finally {

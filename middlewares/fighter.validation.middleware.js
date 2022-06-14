@@ -5,7 +5,11 @@ const createFighterValid = (req, res, next) => {
     // TODO: Implement validatior for fighter entity during creation
     const {id, name, health, power, defense} = req.body;
     try {
-        if (id) {
+        if (Object.keys(req.body).length > 4) {
+            throw Error('Too many arguments')
+        }
+
+        if (id || req.body.Id) {
             throw Error('This request cannot contain id value');
         }
 
@@ -71,7 +75,7 @@ const updateFighterValid = (req, res, next) => {
             throw Error('Defense can only be from 1 to 10');
         }
 
-        if (health && typeof isNaN(Number(health))) {
+        if (health && isNaN(Number(health))) {
             throw Error('Health must be a number');
         }
 

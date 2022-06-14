@@ -55,10 +55,11 @@ router.put('/:id', updateFighterValid, (req, res, next) => {
     }
     try {
         const {health, power, defense} = req.body;
+        const fighterData = FighterService.getOne({id: req.params.id});
         const fighter = FighterService.update({id: req.params.id}, {
-            health,
-            power,
-            defense
+            health: health ? health : fighterData.health,
+            power: power ? power : fighterData.power,
+            defense: defense ? defense : fighterData.defense
         });
         res.data = fighter;
     } catch (err) {
@@ -71,7 +72,7 @@ router.put('/:id', updateFighterValid, (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     try {
         const fighter = FighterService.delete({id: req.params.id});
-        res.data = fighter;
+        res.status(404).json('Fighter was deleted successfully');
     } catch (err) {
         res.err = err;
     } finally {

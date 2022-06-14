@@ -37,6 +37,7 @@ const createUserValid = (req, res, next) => {
 
 const updateUserValid = (req, res, next) => {
     // TODO: Implement validatior for user entity during update
+    const {id, firstName, lastName, email, phoneNumber, password} = req.body;
     try {
         if(!(firstName || lastName || email || phoneNumber || password)) {
             throw Error('Cannot update with empty fields');
