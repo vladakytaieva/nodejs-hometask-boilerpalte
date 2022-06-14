@@ -1,4 +1,5 @@
 const { fighter } = require('../models/fighter');
+const FighterService = require('../services/fighterService');
 
 const createFighterValid = (req, res, next) => {
     // TODO: Implement validatior for fighter entity during creation
@@ -34,6 +35,10 @@ const createFighterValid = (req, res, next) => {
 
         if (health && (health < 80 || health > 120)) {
             throw Error('Health can only be from 80 to 120');
+        }
+
+        if (FighterService.getOne({name})) {
+            throw Error('Fighter with such name already exists')
         }
     } catch (err) {
         res.err = err;

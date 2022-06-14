@@ -1,4 +1,5 @@
 const { user } = require('../models/user');
+const UserService = require('../services/userService');
 
 const createUserValid = (req, res, next) => {
     // TODO: Implement validatior for user entity during creation
@@ -13,17 +14,20 @@ const createUserValid = (req, res, next) => {
         }
 
         if (!email.match(/^[a-z0-9]((\.|\+)?[a-z0-9]){5,}@gmail\.com/)) {
-            throw Error('Email must be gmail format')
+            throw Error('Email must be gmail format');
         }
 
         if (!phoneNumber.match(/\+380[0-9]{9}/) || phoneNumber.length !== 13) {
-            throw Error('Phone number must be in +380xxxxxxxxx format')
+            throw Error('Phone number must be in +380xxxxxxxxx format');
         }
 
         if (password.length < 3) {
-            throw Error('Password must be at least 3 characters long')
+            throw Error('Password must be at least 3 characters long');
         }
 
+        if (UserService.search({ email })) {
+            throw Error('User with this email already exists');
+        }
     } catch (err) {
         res.err = err;
     } finally {
@@ -39,11 +43,11 @@ const updateUserValid = (req, res, next) => {
         }
 
         if (email && !email.match(/^[a-z0-9]((\.|\+)?[a-z0-9]){5,}@gmail\.com/)) {
-            throw Error('Email must be gmail format')
+            throw Error('Email must be gmail format');
         }
 
         if (phoneNumber && (!phoneNumber.match(/\+380[0-9]{9}/) || phoneNumber.length !== 13)) {
-            throw Error('Phone number must be in +380xxxxxxxxx format')
+            throw Error('Phone number must be in +380xxxxxxxxx format');
         }
 
     } catch(err) {
